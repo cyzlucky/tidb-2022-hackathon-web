@@ -78,7 +78,7 @@ export default function AddTaskName(props: AddTaskNameProps) {
 
   return (
     <Container>
-      <Grid>
+      <Grid sx={{width: "424px"}}>
         <TextInput
           title="任务名称"
           label="name"

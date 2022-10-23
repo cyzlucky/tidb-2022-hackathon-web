@@ -24,11 +24,11 @@ function AddTaskSourceDatasource(props: AddTaskSourceDatasourceProps) {
     <LimitTags
       open={open}
       setOpen={setOpen}
-      label="select-table"
+      label="select-source-datasource"
       loading={loading}
       options={options}
       labelKey={"name"}
-      value={data.source.datasourceName}
+      value={data.source?.datasourceName}
       handleChange={(event, value: DataSource, reason) => {
         value && setData((data) => {
           return {

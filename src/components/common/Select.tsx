@@ -18,7 +18,7 @@ interface LimitTagsProps {
   multiple?: boolean;
   disableCloseOnSelect?: boolean;
   handleChange: (event: React.SyntheticEvent<Element, Event>, value: any, reason: AutocompleteChangeReason, details?: AutocompleteChangeDetails<any> | undefined) => void;
-  value?: string | string[];
+  value: string | string[] | null,
 }
 
 export default function LimitTags(props: LimitTagsProps) {
@@ -49,20 +49,25 @@ export default function LimitTags(props: LimitTagsProps) {
       }}
       isOptionEqualToValue={
         (option, value) => {
-          const result = option[labelKey] === (value === undefined || typeof value === "string" ? "" : value[labelKey]);
+          const v = typeof value === "object" ? value[labelKey] : value;
+          const result = option[labelKey] === v;
           return result;
         }
       }
       getOptionLabel={(option) => {
-        return typeof option === "string" ? option : option[labelKey]
+        if (typeof option === "object") {
+          return option[labelKey];
+        } else {
+          return option;
+        }
       }}
       options={options}
       loading={loading}
       renderInput={renderInput}
       multiple={multiple}
       limitTags={1}
-      value={value}
       sx={{ width: '360px' }}
+      value={value}
       onChange={handleChange}
     />
   );

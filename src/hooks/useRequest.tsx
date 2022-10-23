@@ -25,21 +25,17 @@ export default function useRequest<D = any, P = any>(
       return undefined;
     }
 
-    (async () => {
-      await sleep(500); // For demo purposes.
-
-      if (active) {
-        requestFunc(params).then((response) => {
-          switch (response.data.code) {
-            case 0: {
-              setOptions([...response.data.data]);
-            } break;
-          }
-        }).catch((err) => {
-          setOpen(false);
-        });
-      }
-    })();
+    if (active) {
+      requestFunc(params).then((response) => {
+        switch (response.data.code) {
+          case 0: {
+            setOptions([...response.data.data]);
+          } break;
+        }
+      }).catch((err) => {
+        setOpen(false);
+      });
+    }
 
     return () => {
       active = false;

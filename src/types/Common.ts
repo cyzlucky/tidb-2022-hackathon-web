@@ -5,20 +5,23 @@ export interface RouterObj {
 }
 
 export interface CreateTaskParams {
-  name: string;
+  name: string | null;
   source:{
-    client: string;
+    client: string | null;
     datasource: number;
-    datasourceName: string;
-    database: string;
+    datasourceName: string | null;
+    database: string | null;
     table: string[];
-    selectSql: string;
+    selectSql: string | null;
     taskSplitMode: number;
+    taskSplitModeName: string | null;
   };
   target:{
-    datasource: string;
-    database: string;
+    datasource: number;
+    datasourceName: string | null;
+    database: string | null;
     importDataMode: number;
+    importDataModeName: string | null;
   };
   concurrent: number;
   isSyncSchema: boolean;

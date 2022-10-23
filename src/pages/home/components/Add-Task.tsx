@@ -17,6 +17,10 @@ import { CreateTaskInputParams, CreateTaskParams, ErrorField } from '@/types/Com
 import AddTaskName from './Add-Task-Name';
 import AddTaskSource from './add-task-source';
 import AddTaskTarget from './add-task-target';
+import { createTask } from '@/api/apiRequest';
+import { Responses } from '@/types/api/common';
+import { AxiosResponse } from 'axios';
+import { useSnackbar } from 'notistack';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -96,22 +100,26 @@ export default function AddTaskDialog(props: AddTaskDialogProps) {
     formState: { errors },
   } = useForm<InputParams>();
   const submitRef = React.useRef<HTMLInputElement>(null);
+  const { enqueueSnackbar } = useSnackbar();
 
   const [data, setData] = React.useState<CreateTaskParams>({
     name: "",
     source: {
-      client: "",
+      client: null,
       datasource: 0,
-      datasourceName: "",
-      database: "",
+      datasourceName: null,
+      database: null,
       table: [],
-      selectSql: "",
+      selectSql: null,
       taskSplitMode: 1,
+      taskSplitModeName: null,
     },
     target: {
-      datasource: "",
-      database: "",
+      datasource: 0,
+      datasourceName: null,
+      database: null,
       importDataMode: 1,
+      importDataModeName: null,
     },
     concurrent: 1,
     isSyncSchema: false,
@@ -128,7 +136,6 @@ export default function AddTaskDialog(props: AddTaskDialogProps) {
 
   React.useEffect(() => {
     const subscription = watch((value, { name }) => {
-      console.log(value);
       if (name) {
         setError({
           ...error,
@@ -145,7 +152,25 @@ export default function AddTaskDialog(props: AddTaskDialogProps) {
 
   const onSubmit: SubmitHandler<InputParams> = (value, event) => {
     console.log("submit", value, data);
-
+    createTask({
+      ...data,
+      name: value.name,
+      source: {
+        ...data.source,
+        selectSql: value.selectSql
+      }
+    }).then((response: AxiosResponse<Responses<null>>) => {
+      handleClose();
+      if (response.data.code === 0) {
+        enqueueSnackbar("创建成功", {
+          variant: "success",
+        });
+      } else {
+        enqueueSnackbar("创建失败", {
+          variant: "error",
+        });
+      }
+    });
   }
 
   const onError: SubmitErrorHandler<InputParams> = (err, event) => {
@@ -186,9 +211,18 @@ export default function AddTaskDialog(props: AddTaskDialogProps) {
                 marginTop: "40px"
               }}
             >
-              <AddTaskSource setData={setData} data={data}/>
+              <AddTaskSource
+                setData={setData}
+                data={data}
+                error={error}
+                register={register}
+                errors={errors.selectSql}
+              />
               <Divider orientation="vertical" flexItem />
-              <AddTaskTarget />
+              <AddTaskTarget
+                setData={setData}
+                data={data}
+              />
             </Grid>
             <input hidden type={"submit"} ref={submitRef}/>
           </Form>

@@ -1,12 +1,16 @@
+import { CreateTaskParams } from "@/types/Common";
 import { Box, Grid } from "@mui/material";
-import BasicSelect from "./Select";
+import AddTaskTargetExportMode from "./add-task-target-export-mode";
+import AddTaskTargetSelectDB from "./add-task-target-select-db";
+import AddTaskTargetDatasource from "./add-task-target-select-source";
 
 interface AddTaskTargetProps {
-
+  data: CreateTaskParams;
+  setData: React.Dispatch<React.SetStateAction<CreateTaskParams>>;
 }
 
 export default function AddTaskTarget(props: AddTaskTargetProps) {
-  const { } = props;
+  const { data, setData } = props;
 
   return (
     <Grid
@@ -17,20 +21,13 @@ export default function AddTaskTarget(props: AddTaskTargetProps) {
       >
         目标集群
       </Grid>
-      <BasicSelect
-        label=''
-        name='选择数据源'
+      <AddTaskTargetDatasource
+        {...props}
       />
       <Box sx={{ height: 32 }} />
-      <BasicSelect
-        label=''
-        name='选择DB'
-      />
+      <AddTaskTargetSelectDB {...props}/>
       <Box sx={{ height: 32 }} />
-      <BasicSelect
-        label=''
-        name='导入模式'
-      />
+      <AddTaskTargetExportMode  {...props}/>
     </Grid>
   );
 }

@@ -1,7 +1,7 @@
 import { SxProps, Theme } from "@mui/material";
 
 export const textFieldContainer: SxProps<Theme> = {
-  minWidth: {xs: "296px", md: "424px"},
+  // minWidth: {xs: "296px", md: "424px"},
   position: "relative",
 };
 

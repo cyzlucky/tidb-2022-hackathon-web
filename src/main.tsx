@@ -20,22 +20,26 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       {/* <ThemeProvider theme={theme}> */}
         <SnackbarProvider
           maxSnack={10}
-          action={(key: SnackbarKey) => (
-            <IconButton
-              sx={snackbarCloseButton}
-              onClick={() => closeSnackbar(key)}
-            >
-              <Close sx={{width: "16px", height: "16px",}}/>
-            </IconButton>
-          )}
-          autoHideDuration={2000}
-          Components={{
-            default: DefaultSnackbar,
-            info: DefaultSnackbar,
-            error: DefaultSnackbar,
-            warning: DefaultSnackbar,
-            success: DefaultSnackbar,
+          // action={(key: SnackbarKey) => (
+          //   <IconButton
+          //     sx={snackbarCloseButton}
+          //     onClick={() => closeSnackbar(key)}
+          //   >
+          //     <Close sx={{width: "16px", height: "16px",}}/>
+          //   </IconButton>
+          // )}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
           }}
+          autoHideDuration={2000}
+          // Components={{
+          //   default: DefaultSnackbar,
+          //   info: DefaultSnackbar,
+          //   error: DefaultSnackbar,
+          //   warning: DefaultSnackbar,
+          //   success: DefaultSnackbar,
+          // }}
         >
           <App />
         </SnackbarProvider>

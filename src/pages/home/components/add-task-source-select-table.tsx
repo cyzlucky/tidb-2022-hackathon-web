@@ -47,8 +47,8 @@ export default function AddTaskSourceSelectTable(props: SelectComponentProps) {
   ] = useRequest<Table, TablesRequest>(
     getTables,
     {
-      database: data.source.database,
-      datasourceId: data.source.datasource
+      database: data?.source?.database ?? "",
+      datasourceId: data?.source?.datasource
     }
   );
 
@@ -61,13 +61,20 @@ export default function AddTaskSourceSelectTable(props: SelectComponentProps) {
       options={options}
       labelKey={"name"}
       disableCloseOnSelect
+      value={data.source.table}
       handleChange={(event, value: Table[], reason) => {
         value && setData((data) => {
           return {
             ...data,
             source: {
               ...data.source,
-              table: value.map((obj: Table) => obj['name'])
+              table: value.map((obj: Table) => {
+                if (typeof obj === "object") {
+                  return obj['name'];
+                } else {
+                  return obj;
+                }
+              })
             }
           }
         });

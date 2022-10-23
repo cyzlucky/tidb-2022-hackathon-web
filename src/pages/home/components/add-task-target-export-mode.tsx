@@ -1,16 +1,16 @@
-import { getClient, getDB } from "@/api/apiRequest";
+import { getClient, getDB, getExportMode } from "@/api/apiRequest";
 import LimitTags from "@/components/common/Select";
 import useRequest from "@/hooks/useRequest";
-import { Client, DB, DBRequest } from "@/types/api/common";
+import { Client, DB, DBRequest, Mode } from "@/types/api/common";
 import { CreateTaskParams } from "@/types/Common";
 import { renderInput } from "./add-task-source-select-table";
 
-interface AddTaskSourceSelectDBProps {
+interface AddTaskTargetExportModeProps {
   data: CreateTaskParams;
   setData: React.Dispatch<React.SetStateAction<CreateTaskParams>>;
 }
 
-function AddTaskSourceSelectDB(props: AddTaskSourceSelectDBProps) {
+function AddTaskTargetExportMode(props: AddTaskTargetExportModeProps) {
   const { setData, data } = props;
   const [
     open,
@@ -18,33 +18,34 @@ function AddTaskSourceSelectDB(props: AddTaskSourceSelectDBProps) {
     options,
     setOptions,
     loading
-  ] = useRequest<DB, DBRequest>(getDB, {datasourceId: data?.source?.datasource});
+  ] = useRequest<Mode>(getExportMode);
 
   return (
     <LimitTags
       open={open}
       setOpen={setOpen}
-      label="select-db"
+      label="select-target-export-mode"
       loading={loading}
       options={options}
       labelKey={"name"}
-      value={data.source.database}
-      handleChange={(event, value: DB, reason) => {
+      value={data.target.importDataModeName}
+      handleChange={(event, value: Mode, reason) => {
         value && setData((data) => {
           return {
             ...data,
-            source: {
-              ...data.source,
-              database: value['name']
+            target: {
+              ...data.target,
+              importDataMode: value['id'],
+              importDataModeName: value['name'],
             }
           }
         });
       }}
       renderInput={(params) =>
-        renderInput(params, loading, "选择DB", "DB")
+        renderInput(params, loading, "导入模式", "Export Mode")
       }
     />
   );
 }
 
-export default AddTaskSourceSelectDB;
+export default AddTaskTargetExportMode;
